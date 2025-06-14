@@ -1,5 +1,6 @@
 АВТОБУСНЫЙ ПАРК
-![Uploading изображение.png…]()
+
+![изображение](https://github.com/user-attachments/assets/7d50a78b-956c-4543-ab5e-5957a9e648d2)
 
 Описание
 ---------
