@@ -106,11 +106,12 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.BackColor = System.Drawing.Color.SkyBlue;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(938, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(900, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -124,6 +125,7 @@
             // 
             // addBusesToolStripMenuItem
             // 
+            this.addBusesToolStripMenuItem.BackColor = System.Drawing.Color.SkyBlue;
             this.addBusesToolStripMenuItem.Name = "addBusesToolStripMenuItem";
             this.addBusesToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
             this.addBusesToolStripMenuItem.Text = "Начальное формирование";
@@ -146,7 +148,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(117, 42);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(313, 300);
+            this.dataGridView1.Size = new System.Drawing.Size(275, 300);
             this.dataGridView1.TabIndex = 5;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -187,12 +189,13 @@
             this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 648);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(938, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(900, 22);
             this.statusStrip1.TabIndex = 9;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
             // 
+            this.toolStripStatusLabel1.BackColor = System.Drawing.Color.CornflowerBlue;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
@@ -215,7 +218,7 @@
             this.dataGridView2.Location = new System.Drawing.Point(531, 42);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
-            this.dataGridView2.Size = new System.Drawing.Size(313, 300);
+            this.dataGridView2.Size = new System.Drawing.Size(275, 300);
             this.dataGridView2.TabIndex = 10;
             // 
             // dataGridViewTextBoxColumn1
@@ -242,7 +245,7 @@
             this.BackColor = System.Drawing.Color.Wheat;
             this.BackgroundImage = global::AVTOBUS.Properties.Resources._3e57f553_7b7b_4b11_bdcd_758c7782333f;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(938, 670);
+            this.ClientSize = new System.Drawing.Size(900, 670);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.btnShowByRoute);

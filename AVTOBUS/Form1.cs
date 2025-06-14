@@ -20,6 +20,9 @@ namespace AVTOBUS
         private void InitializeCustomComponents()
         {
             UpdateStatusBar();
+
+            dataGridView1.CellDoubleClick += dataGridView1_CellDoubleClick;
+            dataGridView2.CellDoubleClick += dataGridView2_CellDoubleClick;
         }
 
         private class BusData
@@ -27,11 +30,9 @@ namespace AVTOBUS
             public string LastName { get; set; }
             public string Initials { get; set; }
             public int Route { get; set; }
-
             public string FullDriverName => $"{LastName} {Initials}";
         }
 
-        // Добавляем новый метод для обработки загрузки файла
         private bool ProcessFileLines(string[] lines)
         {
             try
@@ -39,42 +40,39 @@ namespace AVTOBUS
                 foreach (var line in lines)
                 {
                     var parts = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (parts.Length >= 3)
-                    {
-                        string busNumber = parts[0].Trim();
-                        string driver = parts[1].Trim();
-                        if (int.TryParse(parts[2].Trim(), out int route))
-                        {
-                            string[] nameParts = driver.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                            string lastName = nameParts.Length > 0 ? nameParts[0] : "";
-                            string initials = "";
-                            if (nameParts.Length > 1)
-                            {
-                                initials = $"{nameParts[1][0]}.";
-                                if (nameParts.Length > 2)
-                                {
-                                    initials += $"{nameParts[2][0]}.";
-                                }
-                            }
-                            parkBuses[busNumber] = new BusData
-                            {
-                                LastName = lastName,
-                                Initials = initials,
-                                Route = route
-                            };
-                        }
-                        else
-                        {
-                            MessageBox.Show($"Ошибка в строке: {line}. Неверный номер маршрута.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return false;
-                        }
-                    }
-                    else
+
+                    if (parts.Length < 3)
                     {
                         MessageBox.Show($"Ошибка в строке: {line}. Недостаточно данных.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return false;
                     }
+
+                    string busNumber = parts[0];
+                    string routeStr = parts[parts.Length - 1];
+                    if (!int.TryParse(routeStr, out int route))
+                    {
+                        MessageBox.Show($"Ошибка в строке: {line}. Неверный номер маршрута.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false;
+                    }
+
+                    string[] driverParts = parts.Skip(1).Take(parts.Length - 2).ToArray();
+                    string lastName = driverParts[0];
+                    string initials = "";
+                    if (driverParts.Length > 1)
+                    {
+                        initials = $"{driverParts[1][0]}.";
+                        if (driverParts.Length > 2)
+                            initials += $"{driverParts[2][0]}.";
+                    }
+
+                    parkBuses[busNumber] = new BusData
+                    {
+                        LastName = lastName,
+                        Initials = initials,
+                        Route = route
+                    };
                 }
+
                 return true;
             }
             catch (Exception ex)
@@ -83,47 +81,16 @@ namespace AVTOBUS
                 return false;
             }
         }
-
-        // Остальные методы остаются без изменений
-        private void addBusesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowInputDialog("Добавить автобусы");
-        }
-
-        private void exitBusToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowInputDialog("Выезд автобуса");
-        }
-
-        private void enterBusToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowInputDialog("Въезд автобуса");
-        }
-
-        private void showByBusToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdateDisplay();
-        }
-
-        private void showByRouteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdateDisplayByRoute();
-        }
-
-        private void loadFromFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            LoadFromFile();
-        }
-
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Обработка кликов по ячейкам DataGridView
         }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            // Инициализация при загрузке формы
-        }
+        private void addBusesToolStripMenuItem_Click(object sender, EventArgs e) => ShowInputDialog("Добавить автобусы");
+        private void exitBusToolStripMenuItem_Click(object sender, EventArgs e) => ShowInputDialog("Выезд автобуса");
+        private void enterBusToolStripMenuItem_Click(object sender, EventArgs e) => ShowInputDialog("Въезд автобуса");
+        private void showByBusToolStripMenuItem_Click(object sender, EventArgs e) => UpdateDisplay();
+        private void showByRouteToolStripMenuItem_Click(object sender, EventArgs e) => UpdateDisplayByRoute();
+        private void loadFromFileToolStripMenuItem_Click(object sender, EventArgs e) => LoadFromFile();
+        private void Form1_Load(object sender, EventArgs e) { }
 
         private void ShowInputDialog(string operation)
         {
@@ -214,12 +181,8 @@ namespace AVTOBUS
                     }
                     else
                     {
-                        parkBuses[txtBusNumber.Text] = new BusData
-                        {
-                            LastName = lastName,
-                            Initials = initials,
-                            Route = 0
-                        };
+                        MessageBox.Show("Неверный номер маршрута.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
                     }
                 }
                 else if (operation == "Выезд автобуса")
@@ -308,6 +271,32 @@ namespace AVTOBUS
         private void UpdateStatusBar()
         {
             toolStripStatusLabel1.Text = $"Автобусов в парке: {parkBuses.Count} | На маршруте: {routeBuses.Count}";
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                string busNumber = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                if (parkBuses.Remove(busNumber))
+                {
+                    UpdateDisplay();
+                    UpdateStatusBar();
+                }
+            }
+        }
+
+        private void dataGridView2_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                string busNumber = dataGridView2.Rows[e.RowIndex].Cells[0].Value.ToString();
+                if (routeBuses.Remove(busNumber))
+                {
+                    UpdateDisplay();
+                    UpdateStatusBar();
+                }
+            }
         }
     }
 }
